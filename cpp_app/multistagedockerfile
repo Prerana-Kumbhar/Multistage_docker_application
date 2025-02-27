@@ -1,0 +1,17 @@
+FROM ubuntu:latest AS builder
+
+RUN apt update && apt install -y g++
+
+WORKDIR /app
+
+COPY app.cpp . 
+
+RUN g++ app.cpp -o hello
+
+
+FROM ubuntu:latest
+WORKDIR /app
+
+COPY --from=builder /app/hello .
+
+CMD ["./hello"]
