@@ -1,0 +1,16 @@
+#stage 1
+FROM python:3.10 AS build-stage
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+
+#stage 2
+FROM python:3.10
+
+WORKDIR /app
+COPY --from=build-stage /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+
+COPY app.py .
+ENTRYPOINT ["python"]
+CMD ["app.py"]
